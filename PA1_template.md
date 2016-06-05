@@ -1,7 +1,8 @@
-# Reproducible Research: Peer Assessment 1
+#Personal Movement Data Analysis
+###Assignment: Course Project 1
+______________
 
-
-## Loading and preprocessing the data
+##Loading and preprocessing the data
 
 Loading the data  
 
@@ -9,8 +10,9 @@ Loading the data
 Data<-read.csv(file = "activity.csv")
 ```
 
-## What is mean total number of steps taken per day?
-
+______________
+##What is mean total number of steps taken per day?
+ 
 1. Calculating the total number of steps taken per day
 
 
@@ -29,7 +31,7 @@ print(xt1, type = "html")
 ```
 
 <!-- html table generated in R 3.3.0 by xtable 1.8-2 package -->
-<!-- Sun Jun  5 15:31:37 2016 -->
+<!-- Sun Jun  5 16:11:28 2016 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> steps_per_day </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 2012-10-01 </td> <td align="right">  </td> </tr>
@@ -99,10 +101,11 @@ print(xt1, type = "html")
 
 ```r
 library(ggplot2)
-ggplot(steps_per_day, aes(steps_per_day))+geom_histogram()+labs(title="Number of days in which the given number of steps was taken")+labs(x="Number of steps", y="Count of days")
+plot1<-ggplot(steps_per_day, aes(steps_per_day))+geom_histogram()+labs(title="Number of days in which the given number of steps was taken")+labs(x="Number of steps", y="Count of days")
+print(plot1)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
 
 4. Calculating and reporting the mean and median of the total number of steps taken per day
 
@@ -110,10 +113,10 @@ ggplot(steps_per_day, aes(steps_per_day))+geom_histogram()+labs(title="Number of
 Mean<-mean(steps_per_day$steps_per_day, na.rm = TRUE)
 Median<-median(steps_per_day$steps_per_day, na.rm = TRUE)
 ```
-The mean of the total number of stepts per day is **1.0766189\times 10^{4}** and the median is **10765**.
+The mean of the total number of stepts per day is **1.0766189 &times; 10<sup>4</sup>** and the median is **10765**.
 
 
-## What is the average daily activity pattern?
+##What is the average daily activity pattern?
 
 1. Calculating avarage number of steps per interval (averaged accross all days)
 
@@ -126,7 +129,7 @@ steps_per_interval<-summarize(grouped_by_interval, mean_steps_per_interval=mean(
 
 
 ```r
-with(steps_per_interval, plot.ts(interval, mean_steps_per_interval, 
+plot2<-with(steps_per_interval, plot.ts(interval, mean_steps_per_interval, 
                                  type="l", 
                                  col="blue",
                                  main = "Average number of steps (accross the days)",
@@ -134,7 +137,15 @@ with(steps_per_interval, plot.ts(interval, mean_steps_per_interval,
                                  ylab="Average number of steps"))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
+
+```r
+print(plot2)
+```
+
+```
+## NULL
+```
 
 3. Indicating 5-minute interval with maximum nuber of steps (average accross all the days)
 
@@ -145,7 +156,7 @@ interval_max<-steps_per_interval[interval_max, 1]
 ```
 Interval with maximum average (accross all days) number of steps is **835**.
 
-## Imputing missing values
+##Imputing missing values
 
 1. Counting NAs
 
@@ -183,10 +194,11 @@ imp_steps_per_day<-summarize(imp_grouped_by_day, steps_per_day=sum(steps))
 5. Making a histogram of the total number of steps taken each day
 
 ```r
-ggplot(imp_steps_per_day, aes(steps_per_day))+geom_histogram()+labs(title="Number of days in which the given number of steps was taken (no NAs it the dataset)")+labs(x="Number of steps", y="Count of days")
+plot3<-ggplot(imp_steps_per_day, aes(steps_per_day))+geom_histogram()+labs(title="Number of days in which the given number of steps was taken (no NAs it the dataset)")+labs(x="Number of steps", y="Count of days")
+print(plot3)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png)
 
 6. Calculating and reporting the mean and median of the total number of steps taken per day in the dataset without missing values
 
@@ -194,9 +206,9 @@ ggplot(imp_steps_per_day, aes(steps_per_day))+geom_histogram()+labs(title="Numbe
 impMean<-mean(imp_steps_per_day$steps_per_day, na.rm = TRUE)
 impMedian<-median(imp_steps_per_day$steps_per_day, na.rm = TRUE)
 ```
-The mean of the total number of stepts per day in the dataset without missing values is **1.0766189\times 10^{4}** and the median is **1.0766189\times 10^{4}**. That means that filling in the missing values had **almost no impact** on the mean and the median, i.e. mean changed by **0** and median by **1.1886792**.
+The mean of the total number of stepts per day in the dataset without missing values is **1.0766189 &times; 10<sup>4</sup>** and the median is **1.0766189 &times; 10<sup>4</sup>**. That means that filling in the missing values had **almost no impact** on the mean and the median, i.e. mean changed by **0** and median by **1.1886792**.
 
-## Are there differences in activity patterns between weekdays and weekends?
+##Are there differences in activity patterns between weekdays and weekends?
 
 1. Creating a new factor variable indicating whether a given date is a weekday or weekend day.
 
@@ -216,11 +228,12 @@ mean_steps<-summarize(impData_gruped_by_interval_and_day, mean=mean(steps))
 
 ```r
 library(lattice)
-xyplot(mean~interval| day, data=mean_steps, 
+plot4<-xyplot(mean~interval| day, data=mean_steps, 
        type="l", 
        layout=c(1,2), 
        xlab="Interval", 
        ylab="Number of steps")
+print(plot4)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![plot of chunk unnamed-chunk-17](figure/unnamed-chunk-17-1.png)
